@@ -225,6 +225,10 @@ public abstract class AsyncBuffer<T> implements Parallelizable, Cloneable {
     public abstract void minus(AsyncBuffer<T> buffer) throws SierraOperationException;
     public abstract void multiply(AsyncBuffer<T> buffer) throws SierraOperationException;
     public abstract void divide(AsyncBuffer<T> buffer) throws SierraOperationException;
+    public abstract void blend(AsyncBuffer<T> buffer, T blend) throws SierraOperationException;
+    public abstract void pow(AsyncBuffer<T> buffer) throws SierraOperationException;
+    public abstract void min(AsyncBuffer<T> buffer) throws SierraOperationException;
+    public abstract void max(AsyncBuffer<T> buffer) throws SierraOperationException;
 
     public abstract void clip(T min, T max) throws SierraOperationException;
     public abstract void invert() throws SierraOperationException;

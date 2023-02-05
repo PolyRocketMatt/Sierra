@@ -52,6 +52,26 @@ public class AsyncFloatBuffer extends AsyncBuffer<Float> {
     }
 
     @Override
+    public void blend(AsyncBuffer<Float> buffer, Float blend) throws SierraOperationException {
+        this.mapIndexed((x, z, value) -> value * (1 - blend) + buffer.get(x, z) * blend);
+    }
+
+    @Override
+    public void pow(AsyncBuffer<Float> buffer) throws SierraOperationException {
+        this.mapIndexed((x, z, value) -> (float) Math.pow(value, buffer.get(x, z)));
+    }
+
+    @Override
+    public void min(AsyncBuffer<Float> buffer) throws SierraOperationException {
+        this.mapIndexed((x, z, value) -> Math.min(value, buffer.get(x, z)));
+    }
+
+    @Override
+    public void max(AsyncBuffer<Float> buffer) throws SierraOperationException {
+        this.mapIndexed((x, z, value) -> Math.max(value, buffer.get(x, z)));
+    }
+
+    @Override
     public void clip(Float min, Float max) throws SierraOperationException {
         this.map(value -> Math.min(Math.max(value, min), max));
     }
