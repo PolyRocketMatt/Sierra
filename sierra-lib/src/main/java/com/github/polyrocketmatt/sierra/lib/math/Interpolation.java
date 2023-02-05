@@ -10,7 +10,15 @@ public class Interpolation {
         return x * x * (3 - 2 * x);
     }
 
+    public static float smoothStep(float x) {
+        return x * x * (3 - 2 * x);
+    }
+
     public static double smootherStep(double x) {
+        return x * x * x * (x * (x * 6 - 15) + 10);
+    }
+
+    public static float smootherStep(float x) {
         return x * x * x * (x * (x * 6 - 15) + 10);
     }
 

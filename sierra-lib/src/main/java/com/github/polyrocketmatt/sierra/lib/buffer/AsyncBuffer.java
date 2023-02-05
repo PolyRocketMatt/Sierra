@@ -3,6 +3,9 @@ package com.github.polyrocketmatt.sierra.lib.buffer;
 import com.github.polyrocketmatt.sierra.lib.Parallelizable;
 import com.github.polyrocketmatt.sierra.lib.exception.SierraArgumentException;
 import com.github.polyrocketmatt.sierra.lib.exception.SierraOperationException;
+import com.github.polyrocketmatt.sierra.lib.noise.NoiseUtils;
+import com.github.polyrocketmatt.sierra.lib.noise.data.NoiseData;
+import com.github.polyrocketmatt.sierra.lib.noise.provider.NoiseProvider;
 import com.github.polyrocketmatt.sierra.lib.utils.TriFunction;
 
 import java.util.ArrayList;
@@ -227,6 +230,11 @@ public abstract class AsyncBuffer<T> implements Parallelizable, Cloneable {
     public abstract void invert() throws SierraOperationException;
     public abstract void lerp(T min, T max) throws SierraOperationException;
     public abstract void normalise(T min, T max) throws SierraOperationException;
+    public abstract void scale(T scale) throws SierraOperationException;
+    public abstract void pow(T exponent) throws SierraOperationException;
+    public abstract void softSmooth() throws SierraOperationException;
+    public abstract void hardSmooth() throws SierraOperationException;
+    public abstract <K extends NoiseData> void warp(NoiseProvider<K> provider, K data, NoiseUtils.NoiseVector<T> offsetX, NoiseUtils.NoiseVector<T> offsetZ, float warp) throws SierraOperationException;
 
     @Override
     public void setMaxThreads(int maxThreads) {

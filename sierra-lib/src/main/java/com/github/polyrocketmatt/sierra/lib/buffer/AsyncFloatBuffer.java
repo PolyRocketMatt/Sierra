@@ -2,6 +2,10 @@ package com.github.polyrocketmatt.sierra.lib.buffer;
 
 import com.github.polyrocketmatt.sierra.lib.exception.SierraArgumentException;
 import com.github.polyrocketmatt.sierra.lib.exception.SierraOperationException;
+import com.github.polyrocketmatt.sierra.lib.math.Interpolation;
+import com.github.polyrocketmatt.sierra.lib.noise.NoiseUtils;
+import com.github.polyrocketmatt.sierra.lib.noise.data.NoiseData;
+import com.github.polyrocketmatt.sierra.lib.noise.provider.NoiseProvider;
 
 public class AsyncFloatBuffer extends AsyncBuffer<Float> {
 
@@ -65,6 +69,43 @@ public class AsyncFloatBuffer extends AsyncBuffer<Float> {
     @Override
     public void normalise(Float min, Float max) throws SierraOperationException {
         this.map(value -> (value - min) / (max - min));
+    }
+
+    @Override
+    public void scale(Float scale) throws SierraOperationException {
+        this.map(value -> value * scale);
+    }
+
+    @Override
+    public void pow(Float exponent) throws SierraOperationException {
+        this.map(value -> (float) Math.pow(value, exponent));
+    }
+
+    @Override
+    public void softSmooth() throws SierraOperationException {
+        this.map(Interpolation::smoothStep);
+    }
+
+    @Override
+    public void hardSmooth() throws SierraOperationException {
+        this.map(Interpolation::smootherStep);
+    }
+
+    @Override
+    public <K extends NoiseData> void warp(NoiseProvider<K> provider, K data, NoiseUtils.NoiseVector<Float> offsetX, NoiseUtils.NoiseVector<Float> offsetZ, float warp) throws SierraOperationException {
+        if (!(offsetX instanceof NoiseUtils.Float2 oX))
+            throw new SierraOperationException("Offset X must be a Double2 vector");
+        if (!(offsetZ instanceof NoiseUtils.Float2 oZ))
+            throw new SierraOperationException("Offset Z must be a Double2 vector");
+
+        this.mapIndexed((x, z, value) -> {
+            NoiseUtils.Float2 q = new NoiseUtils.Float2(
+                    (float) provider.noise((double) x + oX.x(), 0.0, (double) z + oX.z(), data),
+                    (float) provider.noise((double) x + oZ.x(), 0.0, (double) z + oZ.z(), data)
+            );
+
+            return (float) provider.noise(q.x() * warp + x, 0.0, q.z() * warp + z, data);
+        });
     }
 
     @Override
