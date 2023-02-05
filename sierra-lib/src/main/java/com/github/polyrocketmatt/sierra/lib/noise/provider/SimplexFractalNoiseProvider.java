@@ -30,62 +30,56 @@ public class SimplexFractalNoiseProvider implements NoiseProvider<SimplexFractal
         SimplexNoiseData simplexData = new SimplexNoiseData(seed);
 
          switch (fractalType) {
-             case FBM -> {
-                 buffer.mapIndexed((x, z, value) -> {
-                     double sum = noise.noise(x * scale, 0.0, z * scale, simplexData);
-                     double amp = 1.0;
-                     double sX = x;// * 0.01;
-                     double sZ = z;// * 0.01;
+             case FBM -> buffer.mapIndexed((x, z, value) -> {
+                 double sum = noise.noise(x * scale, 0.0, z * scale, simplexData);
+                 double amp = 1.0;
+                 double sX = x;
+                 double sZ = z;
 
-                     for (int i = 1; i < octaves; i++) {
-                         sX *= lacunarity;
-                         sZ *= lacunarity;
+                 for (int i = 1; i < octaves; i++) {
+                     sX *= lacunarity;
+                     sZ *= lacunarity;
 
-                         amp *= gain;
-                         sum += noise.noise(sX * scale, 0.0, sZ * scale, simplexData) * amp;
-                     }
+                     amp *= gain;
+                     sum += noise.noise(sX * scale, 0.0, sZ * scale, simplexData) * amp;
+                 }
 
-                     return (float) sum;
-                 });
-             }
+                 return (float) sum;
+             });
 
-             case BILLOW -> {
-                 buffer.mapIndexed((x, z, value) -> {
-                     double sum = fastAbs(noise.noise(x * scale, 0.0, z * scale, simplexData)) * 2 - 1;
-                     double amp = 1.0;
-                     double sX = x;
-                     double sZ = z;
+             case BILLOW -> buffer.mapIndexed((x, z, value) -> {
+                 double sum = fastAbs(noise.noise(x * scale, 0.0, z * scale, simplexData)) * 2 - 1;
+                 double amp = 1.0;
+                 double sX = x;
+                 double sZ = z;
 
-                     for (int i = 1; i < octaves; i++) {
-                         sX *= lacunarity;
-                         sZ *= lacunarity;
+                 for (int i = 1; i < octaves; i++) {
+                     sX *= lacunarity;
+                     sZ *= lacunarity;
 
-                         amp *= gain;
-                         sum += (fastAbs(noise.noise(sX * scale, 0.0, sZ * scale, simplexData)) * 2 - 1) * amp;
-                     }
+                     amp *= gain;
+                     sum += (fastAbs(noise.noise(sX * scale, 0.0, sZ * scale, simplexData)) * 2 - 1) * amp;
+                 }
 
-                     return (float) sum;
-                 });
-             }
+                 return (float) sum;
+             });
 
-             case RIDGED -> {
-                 buffer.mapIndexed((x, z, value) -> {
-                     double sum = 1.0 - noise.noise(x * scale, 0.0, z * scale, simplexData);
-                     double amp = 1.0;
-                     double sX = x;
-                     double sZ = z;
+             case RIDGED -> buffer.mapIndexed((x, z, value) -> {
+                 double sum = 1.0 - noise.noise(x * scale, 0.0, z * scale, simplexData);
+                 double amp = 1.0;
+                 double sX = x;
+                 double sZ = z;
 
-                     for (int i = 1; i < octaves; i++) {
-                         sX *= lacunarity;
-                         sZ *= lacunarity;
+                 for (int i = 1; i < octaves; i++) {
+                     sX *= lacunarity;
+                     sZ *= lacunarity;
 
-                         amp *= gain;
-                         sum += (1.0f - fastAbs(noise.noise(sX * scale, 0.0, sZ * scale, simplexData))) * amp;
-                     }
+                     amp *= gain;
+                     sum += (1.0f - fastAbs(noise.noise(sX * scale, 0.0, sZ * scale, simplexData))) * amp;
+                 }
 
-                     return (float) sum;
-                 });
-             }
+                 return (float) sum;
+             });
          }
     }
 
