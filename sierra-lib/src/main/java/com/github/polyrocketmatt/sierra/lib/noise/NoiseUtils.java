@@ -16,6 +16,25 @@ public class NoiseUtils {
             new Float2(1.0f, 0f),
     };
 
+    private static final Float3[] GRAD_3D = new Float3[]{
+            new Float3(1.0f, 1.0f, 0.0f),
+            new Float3(-1.0f, 1.0f, 0.0f),
+            new Float3(1.0f, -1.0f, 0.0f),
+            new Float3(-1.0f, -1.0f, 0.0f),
+            new Float3(1.0f, 0.0f, 1.0f),
+            new Float3(-1.0f, 0.0f, 1.0f),
+            new Float3(1.0f, 0.0f, -1.0f),
+            new Float3(-1.0f, 0.0f, -1.0f),
+            new Float3(0.0f, 1.0f, 1.0f),
+            new Float3(0.0f, -1.0f, 1.0f),
+            new Float3(0.0f, 1.0f, -1.0f),
+            new Float3(0.0f, -1.0f, -1.0f),
+            new Float3(1.0f, 1.0f, 0.0f),
+            new Float3(0.0f, -1.0f, 1.0f),
+            new Float3(-1.0f, 1.0f, 0.0f),
+            new Float3(0.0f, -1.0f, -1.0f),
+    };
+
     public static final int X_PRIME = 1619;
     public static final int Y_PRIME = 31337;
     public static final int Z_PRIME = 6971;
@@ -26,17 +45,26 @@ public class NoiseUtils {
     public static final double F2 = 0.5 * (SQRT3 - 1.0);
     public static final double G2 = (3.0 - SQRT3) / 6.0;
 
-    //  TODO: Should this be a signed/unsigned shift?
-    public static double gradCoord2d(int seed, int x, int z, double fX, double fZ) {
-        int hash = seed;
+    public static double gradCoord3d(int seed, int x, int y, int z, double fX, double fY, double fZ) {
+        var hash = seed;
         hash = hash ^ X_PRIME * x;
-        hash = hash ^ Y_PRIME * z;
+        hash = hash ^ Y_PRIME * y;
+        hash = hash ^ Z_PRIME * z;
         hash *= hash * hash * 60493;
         hash = (hash >> 13) ^ hash;
 
-        Float2 grad = GRAD_2D[hash & 7];
+        Float3 grad = GRAD_3D[hash & 15];
 
-        return fX * grad.x + fZ * grad.z;
+        return fX * grad.x + fY * grad.y + fZ * grad.z;
+    }
+
+    public static double valCoord3d(int seed, int x, int y, int z) {
+        int n = seed;
+        n = n ^ X_PRIME * x;
+        n = n ^ Y_PRIME * y;
+        n = n ^ Z_PRIME * z;
+
+        return (n * n * n * 60493) / (2147483648.0);
     }
 
 }

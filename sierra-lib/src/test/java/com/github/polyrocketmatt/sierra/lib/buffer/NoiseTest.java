@@ -1,9 +1,10 @@
 package com.github.polyrocketmatt.sierra.lib.buffer;
 
-import com.github.polyrocketmatt.sierra.lib.noise.data.SimplexFractalNoiseData;
+import com.github.polyrocketmatt.sierra.lib.math.Interpolation;
 import com.github.polyrocketmatt.sierra.lib.noise.data.SimplexNoiseData;
-import com.github.polyrocketmatt.sierra.lib.noise.provider.SimplexFractalNoiseProvider;
+import com.github.polyrocketmatt.sierra.lib.noise.data.ValueNoiseData;
 import com.github.polyrocketmatt.sierra.lib.noise.provider.SimplexNoiseProvider;
+import com.github.polyrocketmatt.sierra.lib.noise.provider.ValueNoiseProvider;
 import org.junit.jupiter.api.Test;
 
 import javax.imageio.ImageIO;
@@ -22,9 +23,9 @@ public class NoiseTest {
         int chunkSize = 512;
 
         AsyncFloatBuffer buffer = new AsyncFloatBuffer(size, chunkSize, 0.0f);
-        SimplexFractalNoiseProvider provider = SimplexFractalNoiseProvider.getInstance();
+        SimplexNoiseProvider provider = SimplexNoiseProvider.getInstance();
 
-        provider.provide(buffer, new SimplexFractalNoiseData(0, 20, 0.05f, 0.5f, 2.0f, SimplexFractalNoiseProvider.FractalType.FBM));
+        provider.provide(buffer, new SimplexNoiseData(0));
 
         //  Transform the buffer to an image
         BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);

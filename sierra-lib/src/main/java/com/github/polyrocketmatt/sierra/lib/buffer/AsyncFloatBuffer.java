@@ -48,6 +48,26 @@ public class AsyncFloatBuffer extends AsyncBuffer<Float> {
     }
 
     @Override
+    public void clip(Float min, Float max) throws SierraOperationException {
+        this.map(value -> Math.min(Math.max(value, min), max));
+    }
+
+    @Override
+    public void invert() throws SierraOperationException {
+        this.map(value -> 1 - value);
+    }
+
+    @Override
+    public void lerp(Float min, Float max) throws SierraOperationException {
+        this.map(value -> min + (max - min) * value);
+    }
+
+    @Override
+    public void normalise(Float min, Float max) throws SierraOperationException {
+        this.map(value -> (value - min) / (max - min));
+    }
+
+    @Override
     protected AsyncFloatBuffer clone() throws CloneNotSupportedException {
         try {
             AsyncFloatBuffer clone = new AsyncFloatBuffer(size, chunkSize);

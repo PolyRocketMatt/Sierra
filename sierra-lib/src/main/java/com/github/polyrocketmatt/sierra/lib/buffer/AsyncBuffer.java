@@ -223,6 +223,11 @@ public abstract class AsyncBuffer<T> implements Parallelizable, Cloneable {
     public abstract void multiply(AsyncBuffer<T> buffer) throws SierraOperationException;
     public abstract void divide(AsyncBuffer<T> buffer) throws SierraOperationException;
 
+    public abstract void clip(T min, T max) throws SierraOperationException;
+    public abstract void invert() throws SierraOperationException;
+    public abstract void lerp(T min, T max) throws SierraOperationException;
+    public abstract void normalise(T min, T max) throws SierraOperationException;
+
     @Override
     public void setMaxThreads(int maxThreads) {
         this.maxThreads = maxThreads;

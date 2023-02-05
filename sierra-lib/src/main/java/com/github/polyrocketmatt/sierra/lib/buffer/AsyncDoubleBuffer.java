@@ -43,6 +43,26 @@ public class AsyncDoubleBuffer extends AsyncBuffer<Double> {
     }
 
     @Override
+    public void clip(Double min, Double max) throws SierraOperationException {
+        this.map(value -> Math.min(Math.max(value, min), max));
+    }
+
+    @Override
+    public void invert() throws SierraOperationException {
+        this.map(value -> 1 - value);
+    }
+
+    @Override
+    public void lerp(Double min, Double max) throws SierraOperationException {
+        this.map(value -> min + (max - min) * value);
+    }
+
+    @Override
+    public void normalise(Double min, Double max) throws SierraOperationException {
+        this.map(value -> (value - min) / (max - min));
+    }
+
+    @Override
     protected AsyncDoubleBuffer clone() throws CloneNotSupportedException {
         try {
             AsyncDoubleBuffer clone = new AsyncDoubleBuffer(size, chunkSize);
