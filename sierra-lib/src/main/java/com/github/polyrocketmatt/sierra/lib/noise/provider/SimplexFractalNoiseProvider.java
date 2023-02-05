@@ -25,7 +25,6 @@ public class SimplexFractalNoiseProvider implements NoiseProvider<SimplexFractal
         float gain = data.gain();
         float lacunarity = data.lacunarity();
         FractalType fractalType = data.fractalType();
-
         SimplexNoiseProvider noise = new SimplexNoiseProvider();
         SimplexNoiseData simplexData = new SimplexNoiseData(seed);
 
@@ -90,7 +89,69 @@ public class SimplexFractalNoiseProvider implements NoiseProvider<SimplexFractal
 
     @Override
     public float noise(float x, float y, float z, SimplexFractalNoiseData data) throws SierraNoiseException {
-        return 0;
+        int seed = data.seed();
+        int octaves = data.octaves();
+        float scale = data.scale();
+        float gain = data.gain();
+        float lacunarity = data.lacunarity();
+        FractalType fractalType = data.fractalType();
+        SimplexNoiseProvider noise = new SimplexNoiseProvider();
+        SimplexNoiseData simplexData = new SimplexNoiseData(seed);
+
+        switch (fractalType) {
+            case FBM -> {
+                double sum = noise.noise(x * scale, 0.0, z * scale, simplexData);
+                double amp = 1.0;
+                double sX = x;
+                double sZ = z;
+
+                for (int i = 1; i < octaves; i++) {
+                    sX *= lacunarity;
+                    sZ *= lacunarity;
+
+                    amp *= gain;
+                    sum += noise.noise(sX * scale, 0.0, sZ * scale, simplexData) * amp;
+                }
+
+                return (float) sum;
+            }
+
+            case BILLOW -> {
+                double sum = fastAbs(noise.noise(x * scale, 0.0, z * scale, simplexData)) * 2 - 1;
+                double amp = 1.0;
+                double sX = x;
+                double sZ = z;
+
+                for (int i = 1; i < octaves; i++) {
+                    sX *= lacunarity;
+                    sZ *= lacunarity;
+
+                    amp *= gain;
+                    sum += (fastAbs(noise.noise(sX * scale, 0.0, sZ * scale, simplexData)) * 2 - 1) * amp;
+                }
+
+                return (float) sum;
+            }
+
+            case RIDGED -> {
+                double sum = 1.0 - noise.noise(x * scale, 0.0, z * scale, simplexData);
+                double amp = 1.0;
+                double sX = x;
+                double sZ = z;
+
+                for (int i = 1; i < octaves; i++) {
+                    sX *= lacunarity;
+                    sZ *= lacunarity;
+
+                    amp *= gain;
+                    sum += (1.0f - fastAbs(noise.noise(sX * scale, 0.0, sZ * scale, simplexData))) * amp;
+                }
+
+                return (float) sum;
+            }
+        }
+
+        throw new SierraNoiseException("Invalid fractal type", NoiseType.SIMPLEX_FRACTAL, data);
     }
 
     @Override
