@@ -89,6 +89,11 @@ public class SimplexFractalNoiseProvider implements NoiseProvider<SimplexFractal
 
     @Override
     public float noise(float x, float y, float z, SimplexFractalNoiseData data) throws SierraNoiseException {
+        return (float) noise(x, y, (double) z, data);
+    }
+
+    @Override
+    public double noise(double x, double y, double z, SimplexFractalNoiseData data) throws SierraNoiseException {
         int seed = data.seed();
         int octaves = data.octaves();
         float scale = data.scale();
@@ -152,11 +157,6 @@ public class SimplexFractalNoiseProvider implements NoiseProvider<SimplexFractal
         }
 
         throw new SierraNoiseException("Invalid fractal type", NoiseType.SIMPLEX_FRACTAL, data);
-    }
-
-    @Override
-    public double noise(double x, double y, double z, SimplexFractalNoiseData data) throws SierraNoiseException {
-        return 0;
     }
 
     @Override
