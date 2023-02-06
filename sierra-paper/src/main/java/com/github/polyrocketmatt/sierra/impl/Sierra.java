@@ -2,6 +2,7 @@ package com.github.polyrocketmatt.sierra.impl;
 
 import com.github.polyrocketmatt.delegate.impl.Delegate;
 import com.github.polyrocketmatt.sierra.impl.command.InfoCommand;
+import com.github.polyrocketmatt.sierra.logging.SierraLogger;
 import com.github.polyrocketmatt.sierra.utils.ResourceUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -50,12 +51,6 @@ public class Sierra extends JavaPlugin {
         super.onDisable();
     }
 
-    private void initialiseCommands() {
-        Delegate.hook(this);
-
-        new InfoCommand().createCommand();
-    }
-
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void initialiseDataFolder() {
         //  Create data directory
@@ -64,7 +59,8 @@ public class Sierra extends JavaPlugin {
     }
 
     private void initialiseLogger() {
-
+        File logFile = new File(LOGGING_DIR, "sierra.log");
+        SierraLogger.initialiseEngineLogger(logFile, "dd-M-yyyy hh:mm:ss");
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -94,6 +90,13 @@ public class Sierra extends JavaPlugin {
     private void installDataPacks() {
 
     }
+
+    private void initialiseCommands() {
+        Delegate.hook(this);
+
+        new InfoCommand().createCommand();
+    }
+
 
     public static Plugin getPlugin() {
         return Bukkit.getServer().getPluginManager().getPlugin("Sierra");
