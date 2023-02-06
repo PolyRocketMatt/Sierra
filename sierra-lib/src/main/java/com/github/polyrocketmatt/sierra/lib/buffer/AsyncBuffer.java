@@ -189,8 +189,8 @@ public abstract class AsyncBuffer<T> implements Parallelizable, Cloneable {
         for (BufferChunk<T> chunk : chunks) {
             Runnable task = () -> {
                 //  Compute new chunk position
-                int newX = width - chunk.getX() - chunk.getChunkWidth();
-                int newZ = chunk.getZ();
+                int newX = chunk.getX();
+                int newZ = height - chunk.getZ() - chunk.getChunkHeight();
 
                 //  Flip and construct
                 BufferChunk<T> newChunk = chunk.to(newX, newZ);
