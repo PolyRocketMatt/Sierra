@@ -1,11 +1,11 @@
 package com.github.polyrocketmatt.sierra.utils;
 
-import java.net.URL;
+import java.io.InputStream;
 
 public class ResourceUtils {
 
-    public static URL getEngineResource(String name) {
-        return Thread.currentThread().getContextClassLoader().getResource(name);
+    public static InputStream getEngineResourceIS(String name) {
+        return ResourceUtils.class.getClassLoader().getResourceAsStream(name);
     }
 
 }
