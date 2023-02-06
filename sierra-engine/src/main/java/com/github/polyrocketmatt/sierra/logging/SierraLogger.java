@@ -47,6 +47,11 @@ public class SierraLogger extends Thread {
         timer.schedule(flushTask, 0, 5000);
     }
 
+    @Override
+    public long getId() {
+        return currentThread().getId();
+    }
+
     private void writeLog(String message) {
         try {
             writer.write(message);
@@ -181,6 +186,10 @@ public class SierraLogger extends Thread {
 
     public static void error(String message, LogType type) {
         write(LogLevel.ERROR, message, type);
+    }
+
+    public static long getThreadId() {
+        return logger.getId();
     }
 
 }

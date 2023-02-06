@@ -61,6 +61,7 @@ public class Sierra extends JavaPlugin {
     private void initialiseLogger() {
         File logFile = new File(LOGGING_DIR, "sierra.log");
         SierraLogger.initialiseEngineLogger(logFile, "dd-M-yyyy hh:mm:ss");
+        SierraLogger.inform("Sierra logger has been successfully initialised on thread %s".formatted(SierraLogger.getThreadId()));
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
