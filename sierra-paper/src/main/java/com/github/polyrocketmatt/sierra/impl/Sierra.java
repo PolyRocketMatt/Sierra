@@ -34,11 +34,14 @@ public class Sierra extends JavaPlugin {
 
         initialiseLogger();
 
+        /*
         if (install) {
             initialiseDirectories();
             installEngineProperties();
             installDataPacks();
         }
+
+         */
     }
 
     @Override
