@@ -1,4 +1,4 @@
-package com.github.polyrocketmatt.sierra.utils;
+package com.github.polyrocketmatt.sierra.engine.utils;
 
 public class StringUtils {
 

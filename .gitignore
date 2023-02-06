@@ -4,5 +4,5 @@ dependency-reduced-pom.xml
 src/**
 build/**
 sierra-paper/target/**
-sierra-core/target/**
+sierra-engine/target/**
 sierra-lib/target/**

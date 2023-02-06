@@ -1,4 +1,4 @@
-package com.github.polyrocketmatt.sierra.logging;
+package com.github.polyrocketmatt.sierra.engine.logging;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,8 +19,12 @@ public class SierraLogger extends Thread {
     private final Semaphore semaphore;
     private final Timer timer;
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private SierraLogger(File logFile, String format) {
         try {
+            if (!logFile.exists())
+                logFile.createNewFile();
+
             this.format = new SimpleDateFormat(format);
             this.logFile = logFile;
             this.writer = new BufferedWriter(new FileWriter(logFile, true));
@@ -44,12 +48,7 @@ public class SierraLogger extends Thread {
             }
         };
 
-        timer.schedule(flushTask, 0, 5000);
-    }
-
-    @Override
-    public long getId() {
-        return currentThread().getId();
+        timer.schedule(flushTask, 0, 10000);
     }
 
     private void writeLog(String message) {
@@ -116,8 +115,11 @@ public class SierraLogger extends Thread {
     }
 
     private void close() {
+        inform("Closing logger");
+
         try {
             semaphore.acquire();
+            writer.flush();
             writer.close();
             timer.cancel();
             semaphore.release();
@@ -186,6 +188,10 @@ public class SierraLogger extends Thread {
 
     public static void error(String message, LogType type) {
         write(LogLevel.ERROR, message, type);
+    }
+
+    public static void shutdown() {
+        logger.close();
     }
 
     public static long getThreadId() {

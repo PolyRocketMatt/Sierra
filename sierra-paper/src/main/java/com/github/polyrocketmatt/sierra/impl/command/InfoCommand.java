@@ -3,7 +3,7 @@ package com.github.polyrocketmatt.sierra.impl.command;
 import com.github.polyrocketmatt.delegate.impl.Delegate;
 import com.github.polyrocketmatt.sierra.impl.Sierra;
 
-import static com.github.polyrocketmatt.sierra.utils.StringUtils.PAPER_PREFIX;
+import static com.github.polyrocketmatt.sierra.engine.utils.StringUtils.PAPER_PREFIX;
 
 public class InfoCommand extends SierraCommand {
 

@@ -1,15 +1,17 @@
 package com.github.polyrocketmatt.sierra.impl;
 
 import com.github.polyrocketmatt.delegate.impl.Delegate;
+import com.github.polyrocketmatt.sierra.engine.logging.SierraLogger;
+import com.github.polyrocketmatt.sierra.engine.utils.ResourceUtils;
 import com.github.polyrocketmatt.sierra.impl.command.InfoCommand;
-import com.github.polyrocketmatt.sierra.logging.SierraLogger;
-import com.github.polyrocketmatt.sierra.utils.ResourceUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 
 public class Sierra extends JavaPlugin {
@@ -30,13 +32,13 @@ public class Sierra extends JavaPlugin {
            install = true;
 
            initialiseDataFolder();
+           initialiseDirectories();
         }
 
         initialiseLogger();
 
         /*
         if (install) {
-            initialiseDirectories();
             installEngineProperties();
             installDataPacks();
         }
@@ -51,7 +53,7 @@ public class Sierra extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        super.onDisable();
+        SierraLogger.shutdown();
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -62,9 +64,13 @@ public class Sierra extends JavaPlugin {
     }
 
     private void initialiseLogger() {
-        File logFile = new File(LOGGING_DIR, "sierra.log");
+        String prefixFormat = "dd'_'M'_'yyyy'_'hh'_'mm'_'ss";
+        SimpleDateFormat format = new SimpleDateFormat(prefixFormat);
+        String date = format.format(new Date());
+        File logFile = new File(LOGGING_DIR, "sierra_%s.log".formatted(date));
         SierraLogger.initialiseEngineLogger(logFile, "dd-M-yyyy hh:mm:ss");
-        SierraLogger.inform("Sierra logger has been successfully initialised on thread %s".formatted(SierraLogger.getThreadId()));
+        SierraLogger.inform("Sierra logger has been successfully initialised on thread %s"
+                .formatted(SierraLogger.getThreadId()), SierraLogger.LogType.PLATFORM);
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
