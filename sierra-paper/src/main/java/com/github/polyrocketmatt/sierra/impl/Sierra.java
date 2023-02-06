@@ -103,6 +103,7 @@ public class Sierra extends JavaPlugin {
     }
 
     private void initialiseCommands() {
+        SierraLogger.inform("Initialising commands...", SierraLogger.LogType.PLATFORM);
         Delegate.hook(this);
 
         new InfoCommand().createCommand();
