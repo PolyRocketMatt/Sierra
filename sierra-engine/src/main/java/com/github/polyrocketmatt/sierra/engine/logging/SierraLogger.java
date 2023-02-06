@@ -115,7 +115,7 @@ public class SierraLogger extends Thread {
     }
 
     private void close() {
-        inform("Closing logger");
+        inform("Closing logger", LogType.ENGINE);
 
         try {
             semaphore.acquire();
@@ -126,6 +126,8 @@ public class SierraLogger extends Thread {
         } catch (Exception ex) {
             throw new RuntimeException("Unable to close log file " + logFile.getName(), ex);
         }
+
+        this.interrupt();
     }
 
     public enum LogLevel {
@@ -148,6 +150,8 @@ public class SierraLogger extends Thread {
 
         logger = new SierraLogger(logFile, format);
         logger.start();
+
+        inform("Initialised logger", LogType.ENGINE);
     }
 
     private static void write(LogLevel level, String message) {

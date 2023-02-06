@@ -48,14 +48,12 @@ public class Sierra extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        //  Delegate hook
-        Delegate.hook(this, true);
-
         initialiseCommands();
     }
 
     @Override
     public void onDisable() {
+        Delegate.unhook(this);
         SierraLogger.shutdown();
     }
 
