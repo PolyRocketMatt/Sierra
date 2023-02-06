@@ -2,3 +2,6 @@
 target/**
 dependency-reduced-pom.xml
 src/**
+sierra-paper/target/**
+sierra-core/target/**
+sierra-lib/target/**

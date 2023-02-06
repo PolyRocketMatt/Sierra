@@ -7,8 +7,6 @@ import com.github.polyrocketmatt.sierra.lib.noise.NoiseUtils;
 import com.github.polyrocketmatt.sierra.lib.noise.data.NoiseData;
 import com.github.polyrocketmatt.sierra.lib.noise.provider.NoiseProvider;
 
-import static com.github.polyrocketmatt.sierra.lib.math.Interpolation.smoothStep;
-
 public class AsyncDoubleBuffer extends AsyncBuffer<Double> {
 
     private final int size;
