@@ -48,7 +48,10 @@ public class Sierra extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        super.onEnable();
+        //  Delegate hook
+        Delegate.hook(this, true);
+
+        initialiseCommands();
     }
 
     @Override

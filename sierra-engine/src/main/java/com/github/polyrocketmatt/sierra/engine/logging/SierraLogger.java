@@ -65,7 +65,7 @@ public class SierraLogger extends Thread {
     }
 
     private void logInform(String message, LogType type) {
-        this.writeLog("%s [%s] [%s] %s".formatted(format.format(new Date()), LogLevel.INFO, type.name(), message));
+        this.writeLog("%s [%s] [%s] %s\n".formatted(format.format(new Date()), LogLevel.INFO, type.name(), message));
     }
 
     private void logWarn(String message) {
@@ -73,7 +73,7 @@ public class SierraLogger extends Thread {
     }
 
     private void logWarn(String message, LogType type) {
-        this.writeLog("%s [%s] [%s] %s".formatted(format.format(new Date()), LogLevel.WARNING, type.name(), message));
+        this.writeLog("%s [%s] [%s] %s\n".formatted(format.format(new Date()), LogLevel.WARNING, type.name(), message));
     }
 
     private void logError(String message) {
@@ -81,7 +81,7 @@ public class SierraLogger extends Thread {
     }
 
     private void logError(String message, LogType type) {
-        this.writeLog("%s [%s] [%s] %s".formatted(format.format(new Date()), LogLevel.WARNING, type.name(), message));
+        this.writeLog("%s [%s] [%s] %s\n".formatted(format.format(new Date()), LogLevel.WARNING, type.name(), message));
     }
 
     private void waitAndWrite(LogLevel level, String message) throws InterruptedException {
