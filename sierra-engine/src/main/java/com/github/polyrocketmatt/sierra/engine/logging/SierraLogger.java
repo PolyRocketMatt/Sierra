@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -94,12 +95,32 @@ public class SierraLogger extends Thread {
         semaphore.release();
     }
 
+    private void waitAndWrite(LogLevel level, String[] messages) throws InterruptedException {
+        semaphore.acquire();
+        switch (level) {
+            case INFO ->        Arrays.stream(messages).forEach(this::logInform);
+            case WARNING ->     Arrays.stream(messages).forEach(this::logWarn);
+            case ERROR ->       Arrays.stream(messages).forEach(this::logError);
+        }
+        semaphore.release();
+    }
+
     private void waitAndWrite(LogLevel level, String message, LogType type) throws InterruptedException {
         semaphore.acquire();
         switch (level) {
             case INFO ->        this.logInform(message, type);
             case WARNING ->     this.logWarn(message, type);
             case ERROR ->       this.logError(message, type);
+        }
+        semaphore.release();
+    }
+
+    private void waitAndWrite(LogLevel level, String[] messages, LogType type) throws InterruptedException {
+        semaphore.acquire();
+        switch (level) {
+            case INFO ->        Arrays.stream(messages).forEach(message -> this.logInform(message, type));
+            case WARNING ->     Arrays.stream(messages).forEach(message -> this.logWarn(message, type));
+            case ERROR ->       Arrays.stream(messages).forEach(message -> this.logError(message, type));
         }
         semaphore.release();
     }
@@ -162,9 +183,25 @@ public class SierraLogger extends Thread {
         }
     }
 
+    private static void write(LogLevel level, String[] messages) {
+        try {
+            logger.waitAndWrite(level, messages);
+        } catch (InterruptedException ex) {
+            throw new RuntimeException("Unable to write to log file " + logger.logFile.getName(), ex);
+        }
+    }
+
     private static void write(LogLevel level, String message, LogType type) {
         try {
             logger.waitAndWrite(level, message, type);
+        } catch (InterruptedException ex) {
+            throw new RuntimeException("Unable to write to log file " + logger.logFile.getName(), ex);
+        }
+    }
+
+    private static void write(LogLevel level, String[] messages, LogType type) {
+        try {
+            logger.waitAndWrite(level, messages, type);
         } catch (InterruptedException ex) {
             throw new RuntimeException("Unable to write to log file " + logger.logFile.getName(), ex);
         }
@@ -178,6 +215,14 @@ public class SierraLogger extends Thread {
         write(LogLevel.INFO, message, type);
     }
 
+    public static void inform(String[] messages) {
+        write(LogLevel.INFO, messages);
+    }
+
+    public static void inform(String[] messages, LogType type) {
+        write(LogLevel.INFO, messages, type);
+    }
+
     public static void warn(String message) {
         write(LogLevel.WARNING, message);
     }
@@ -186,12 +231,28 @@ public class SierraLogger extends Thread {
         write(LogLevel.WARNING, message, type);
     }
 
+    public static void warn(String[] messages) {
+        write(LogLevel.WARNING, messages);
+    }
+
+    public static void warn(String[] messages, LogType type) {
+        write(LogLevel.WARNING, messages, type);
+    }
+
     public static void error(String message) {
         write(LogLevel.ERROR, message);
     }
 
     public static void error(String message, LogType type) {
         write(LogLevel.ERROR, message, type);
+    }
+
+    public static void error(String[] messages) {
+        write(LogLevel.ERROR, messages);
+    }
+
+    public static void error(String[] messages, LogType type) {
+        write(LogLevel.ERROR, messages, type);
     }
 
     public static void shutdown() {

@@ -3,7 +3,8 @@ package com.github.polyrocketmatt.sierra.impl;
 import com.github.polyrocketmatt.delegate.impl.Delegate;
 import com.github.polyrocketmatt.sierra.engine.logging.SierraLogger;
 import com.github.polyrocketmatt.sierra.engine.utils.ResourceUtils;
-import com.github.polyrocketmatt.sierra.impl.command.InfoCommand;
+import com.github.polyrocketmatt.sierra.impl.command.SierraCommand;
+import com.github.polyrocketmatt.sierra.impl.event.CommandListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -49,6 +50,7 @@ public class Sierra extends JavaPlugin {
     @Override
     public void onEnable() {
         initialiseCommands();
+        initialiseEvents();
     }
 
     @Override
@@ -104,11 +106,16 @@ public class Sierra extends JavaPlugin {
 
     private void initialiseCommands() {
         SierraLogger.inform("Initialising commands...", SierraLogger.LogType.PLATFORM);
-        Delegate.hook(this);
+        Delegate.hook(this, true, true);
 
-        new InfoCommand().createCommand();
+        new SierraCommand().getCommandChain().build();
     }
 
+    private void initialiseEvents() {
+        SierraLogger.inform("Initialising events...", SierraLogger.LogType.PLATFORM);
+
+        new CommandListener();
+    }
 
     public static Plugin getPlugin() {
         return Bukkit.getServer().getPluginManager().getPlugin("Sierra");
