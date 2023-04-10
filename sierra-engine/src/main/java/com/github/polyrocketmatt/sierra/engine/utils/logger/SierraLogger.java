@@ -1,4 +1,4 @@
-package com.github.polyrocketmatt.sierra.engine.logging;
+package com.github.polyrocketmatt.sierra.engine.utils.logger;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -160,7 +160,7 @@ public class SierraLogger extends Thread {
     public enum LogType {
         UNKNOWN,
         ENGINE,
-        CORE,
+        LIB,
         PLATFORM
     }
 

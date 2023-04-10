@@ -1,4 +1,4 @@
-package com.github.polyrocketmatt.sierra.lib.exception;
+package com.github.polyrocketmatt.sierra.engine.utils.exception;
 
 public class SierraException extends RuntimeException {
 

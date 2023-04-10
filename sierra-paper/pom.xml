@@ -41,6 +41,13 @@
         </dependency>
 
         <dependency>
+            <groupId>dev.dejvokep</groupId>
+            <artifactId>boosted-yaml-spigot</artifactId>
+            <version>1.4</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.polyrocketmatt</groupId>
             <artifactId>sierra-engine</artifactId>
             <version>1.0-SNAPSHOT</version>
@@ -69,6 +76,14 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.4.1</version>
+                <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>dev.dejvokep.boostedyaml</pattern>
+                            <shadedPattern>com.github.polyrocketmatt.sierra.boostedyaml</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
