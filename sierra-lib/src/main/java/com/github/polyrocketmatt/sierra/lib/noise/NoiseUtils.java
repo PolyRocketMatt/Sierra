@@ -1,14 +1,9 @@
 package com.github.polyrocketmatt.sierra.lib.noise;
 
+import com.github.polyrocketmatt.sierra.lib.vector.Float2;
+import com.github.polyrocketmatt.sierra.lib.vector.Float3;
+
 public class NoiseUtils {
-
-    public interface NoiseVector<T> {}
-
-    public record Double2(double x, double z) implements NoiseVector<Double> {}
-    public record Double3(double x, double z, double y) implements NoiseVector<Double> {}
-
-    public record Float2(float x, float z) implements NoiseVector<Float> {}
-    public record Float3(float x, float z, float y) implements NoiseVector<Float> {}
 
     private static final Float2[] GRAD_2D = new Float2[] {
             new Float2(-1.0f, -1.0f),
@@ -319,7 +314,7 @@ public class NoiseUtils {
 
         Float3 grad = GRAD_3D[hash & 15];
 
-        return fX * grad.x + fY * grad.y + fZ * grad.z;
+        return fX * grad.x() + fY * grad.y() + fZ * grad.z();
     }
 
     public static double valCoord3d(int seed, int x, int y, int z) {

@@ -10,6 +10,10 @@ public class FastMaths {
         return (value >= 0) ? (int) value : (int) value - 1;
     }
 
+    public static int fastCeil(float value) { return (value >= 0) ? (int) value + 1 : (int) value; }
+
+    public static int fastCeil(double value) { return (value >= 0) ? (int) value + 1 : (int) value; }
+
     public static float fastAbs(float value) {
         return (value >= 0) ? value : -value;
     }

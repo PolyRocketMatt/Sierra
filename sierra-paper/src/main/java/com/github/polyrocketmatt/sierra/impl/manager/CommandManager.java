@@ -11,19 +11,22 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static com.github.polyrocketmatt.sierra.engine.utils.StringUtils.PAPER_PREFIX;
 
 public class CommandManager implements CommandExecutor {
 
     private final List<SierraCommand> commands = new ArrayList<>();
 
     public CommandManager() {
-        SierraLogger.inform("Initialising command manager...");
+        SierraLogger.inform("Initialising command manager...", SierraLogger.LogType.PLATFORM);
 
         this.commands.add(new CreateWorldCommand());
         this.commands.add(new InfoCommand());
 
-        SierraLogger.inform("   -> Initialized %s commands".formatted(this.commands.size()));
+        SierraLogger.inform("   -> Initialized %s commands".formatted(this.commands.size()), SierraLogger.LogType.PLATFORM);
     }
 
     @Override
@@ -32,7 +35,11 @@ public class CommandManager implements CommandExecutor {
             SierraCommander commander = new SierraCommander(sender);
 
             if (args.length == 0) {
-                commander.sendMessage("&cHelp menu coming soon!");
+                commander.sendMessage(PAPER_PREFIX + "&7Sierra Commands");
+
+                for (SierraCommand sierraCommand : this.commands)
+                    if (commander.hasPermission(sierraCommand.getPermission()))
+                        commander.sendMessage(sierraCommand.getUsage());
             } else {
                 String commandName = args[0];
                 String[] commandArgs = new String[args.length - 1];
@@ -45,7 +52,16 @@ public class CommandManager implements CommandExecutor {
                         else if (!commander.hasPermission(sierraCommand.getPermission()))
                             commander.sendMessage("&cYou do not have permission to run this command!");
                         else
-                            sierraCommand.run(commander, commandArgs);
+                            try {
+                                sierraCommand.run(commander, commandArgs);
+                            } catch (Exception ex) {
+                                String trace =  Arrays.toString(ex.getStackTrace());
+
+                                SierraLogger.error("An error occurred whilst running command '%s'".formatted(sierraCommand.getName()), SierraLogger.LogType.PLATFORM);
+                                SierraLogger.error("    Type: %s".formatted(ex.getClass().getSimpleName()), SierraLogger.LogType.PLATFORM);
+                                SierraLogger.error("    Message: %s".formatted(ex.getMessage()), SierraLogger.LogType.PLATFORM);
+                                SierraLogger.error("    Stack Trace: %s".formatted(trace), SierraLogger.LogType.PLATFORM);
+                            }
                     }
                 }
             }

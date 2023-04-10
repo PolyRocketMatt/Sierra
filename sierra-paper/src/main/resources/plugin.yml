@@ -5,3 +5,7 @@ api-version: 1.13
 description: Next generation terrain generation for Minecraft
 author: PolyRocketMatt
 website: https://github.com/PolyRocketMatt
+
+commands:
+  sierra:
+    description: The main sierra command

@@ -34,13 +34,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.polyrocketmatt</groupId>
-            <artifactId>delegate-bukkit</artifactId>
-            <version>0.0.1</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
             <groupId>dev.dejvokep</groupId>
             <artifactId>boosted-yaml-spigot</artifactId>
             <version>1.4</version>

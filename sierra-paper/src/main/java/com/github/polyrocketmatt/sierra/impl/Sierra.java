@@ -1,8 +1,8 @@
 package com.github.polyrocketmatt.sierra.impl;
 
-import com.github.polyrocketmatt.delegate.impl.Delegate;
 import com.github.polyrocketmatt.sierra.engine.utils.logger.SierraLogger;
 import com.github.polyrocketmatt.sierra.engine.utils.ResourceUtils;
+import com.github.polyrocketmatt.sierra.engine.utils.manager.ConfigurationManager;
 import com.github.polyrocketmatt.sierra.impl.manager.CommandManager;
 import com.github.polyrocketmatt.sierra.impl.manager.WorldManager;
 import dev.dejvokep.boostedyaml.YamlDocument;
@@ -65,24 +65,21 @@ public class Sierra extends JavaPlugin {
 
         //  After installation, initialise the configuration
         initialiseConfigurations();
-
-        //  Initialise managers, events and configurations
-        initialiseManagers();
-        initialiseEvents();
-
-        //  Hooking
-        getCommand("sierra").setExecutor(this);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onEnable() {
+        //  Initialise managers, events
         initialiseManagers();
         initialiseEvents();
+
+        getCommand("sierra").setExecutor(commandManager);
     }
 
     @Override
     public void onDisable() {
-        Delegate.unhook(this);
+        ConfigurationManager.saveAll();
         SierraLogger.shutdown();
     }
 
@@ -171,6 +168,10 @@ public class Sierra extends JavaPlugin {
             this.configuration.setComments(List.of(
                     "Quality Options: low, medium, high, ultra"
             ));
+
+            //  Save configuration
+            ConfigurationManager.add(this.configuration);
+            ConfigurationManager.saveAll();
         } catch (IOException ex) {
             SierraLogger.error("Failed to initialise configuration document", SierraLogger.LogType.PLATFORM);
             SierraLogger.error("    Message: %s".formatted(ex.getMessage()), SierraLogger.LogType.PLATFORM);

@@ -1,5 +1,9 @@
 package com.github.polyrocketmatt.sierra.impl.command;
 
+import org.bukkit.ChatColor;
+
+import static com.github.polyrocketmatt.sierra.engine.utils.StringUtils.PAPER_PREFIX;
+
 public abstract class SierraCommand {
 
     protected String name;
@@ -36,6 +40,11 @@ public abstract class SierraCommand {
         return permission;
     }
 
-    public abstract void run(SierraCommander player, String[] args);
+    public String getUsage() {
+        return ChatColor.translateAlternateColorCodes('&',
+                PAPER_PREFIX + "/%s %s - %s".formatted(name, String.join(" ", arguments), description));
+    }
+
+    public abstract void run(SierraCommander player, String[] args) throws Exception;
 
 }

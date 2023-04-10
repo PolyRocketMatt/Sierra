@@ -6,6 +6,8 @@ import com.github.polyrocketmatt.sierra.lib.math.Interpolation;
 import com.github.polyrocketmatt.sierra.lib.noise.NoiseUtils;
 import com.github.polyrocketmatt.sierra.lib.noise.data.NoiseData;
 import com.github.polyrocketmatt.sierra.lib.noise.provider.NoiseProvider;
+import com.github.polyrocketmatt.sierra.lib.vector.Float2;
+import com.github.polyrocketmatt.sierra.lib.vector.Vector;
 
 public class AsyncFloatBuffer extends AsyncBuffer<Float> {
 
@@ -112,19 +114,19 @@ public class AsyncFloatBuffer extends AsyncBuffer<Float> {
     }
 
     @Override
-    public <K extends NoiseData> void warp(NoiseProvider<K> provider, K data, NoiseUtils.NoiseVector<Float> offsetX, NoiseUtils.NoiseVector<Float> offsetZ, float warp) throws SierraOperationException {
-        if (!(offsetX instanceof NoiseUtils.Float2 oX))
+    public <K extends NoiseData> void warp(NoiseProvider<K> provider, K data, Vector<Float> offsetX, Vector<Float> offsetZ, float warp) throws SierraOperationException {
+        if (!(offsetX instanceof Float2 oX))
             throw new SierraOperationException("Offset X must be a Double2 vector");
-        if (!(offsetZ instanceof NoiseUtils.Float2 oZ))
+        if (!(offsetZ instanceof Float2 oZ))
             throw new SierraOperationException("Offset Z must be a Double2 vector");
 
         this.mapIndexed((x, z, value) -> {
-            NoiseUtils.Float2 q = new NoiseUtils.Float2(
-                    (float) provider.noise((double) x + oX.x(), 0.0, (double) z + oX.z(), data),
-                    (float) provider.noise((double) x + oZ.x(), 0.0, (double) z + oZ.z(), data)
+            Float2 q = new Float2(
+                    (float) provider.noise((double) x + oX.x(), 0.0, (double) z + oX.y(), data),
+                    (float) provider.noise((double) x + oZ.x(), 0.0, (double) z + oZ.y(), data)
             );
 
-            return (float) provider.noise(q.x() * warp + x, 0.0, q.z() * warp + z, data);
+            return (float) provider.noise(q.x() * warp + x, 0.0, q.y() * warp + z, data);
         });
     }
 

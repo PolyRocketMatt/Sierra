@@ -1,24 +1,25 @@
 package com.github.polyrocketmatt.sierra.lib.grid;
 
-import com.github.polyrocketmatt.sierra.engine.utils.io.YamlDocumentManager;
-import dev.dejvokep.boostedyaml.YamlDocument;
+import com.github.polyrocketmatt.sierra.engine.utils.manager.ConfigurationManager;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class WorldGrid {
 
     private final int scale;
     private final int seed;
     private final List<CellPosition> cells;
-    private final YamlDocument gridDocument;
+    private final UUID gridDocument;
 
     public WorldGrid(File folder, int scale, int seed) {
         this.scale = scale;
         this.seed = seed;
         this.cells = new ArrayList<>();
-        this.gridDocument = YamlDocumentManager.get(folder, "grid");
+        this.gridDocument = ConfigurationManager.add(folder, "grid");
+    //YamlDocumentManager.get(folder, "grid");
     }
 
     public void setCellPositions(List<CellPosition> positions) {

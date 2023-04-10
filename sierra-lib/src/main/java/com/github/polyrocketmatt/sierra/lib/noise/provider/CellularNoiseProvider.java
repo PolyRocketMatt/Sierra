@@ -8,6 +8,7 @@ import com.github.polyrocketmatt.sierra.lib.noise.NoiseType;
 import com.github.polyrocketmatt.sierra.lib.noise.NoiseUtils;
 import com.github.polyrocketmatt.sierra.lib.noise.data.CellularNoiseData;
 import com.github.polyrocketmatt.sierra.lib.utils.TriFunction;
+import com.github.polyrocketmatt.sierra.lib.vector.Float3;
 
 import java.util.function.BiFunction;
 
@@ -49,7 +50,7 @@ public class CellularNoiseProvider implements NoiseProvider<CellularNoiseData> {
         for (int iX = xr - 1; iX <= xr +1; iX++) {
             for (int iY = yr - 1; iY <= yr + 1; iY++) {
                 for (int iZ = zr - 1; iZ <= zr + 1; iZ++) {
-                    NoiseUtils.Float3 cell = CELL_3D[hash3d(seed, iX, iY, iZ) & 255];
+                    Float3 cell = CELL_3D[hash3d(seed, iX, iY, iZ) & 255];
 
                     double vecX = iX - x + cell.x();
                     double vecY = iY - y + cell.y();
